@@ -13,7 +13,7 @@ jobs:
             java-version: 1.8
 
       - name: Checkout
-      - uses: actions/checkout@v2
+        uses: actions/checkout@v2
 
       - name: Cache dependencies
         uses: actions/cache@v1
@@ -29,7 +29,7 @@ jobs:
         run: mvn -e --batch-mode test
 
       - name: JUnit Report
-        uses: depsypher/junit-report-annotations-action@v1.0
+        uses: depsypher/junit-report-annotations-action@v1
         if: always()
         with:
           access-token: ${{ secrets.GITHUB_TOKEN }}
