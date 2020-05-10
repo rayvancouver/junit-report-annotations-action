@@ -66,7 +66,7 @@ const fs = require('fs');
 
 							const slackMessage = `
 								Junit test ${testcase.name} failed ${problem.message}
-								https://github.com/${$GITHUB_REPOSITORY}/blob/${branch}/${path}#L${line}
+								https://github.com/${github.repository}/blob/${branch}/${path}#L${line}
 							`;
 
 							await axios({
