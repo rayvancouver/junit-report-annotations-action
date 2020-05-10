@@ -65,9 +65,9 @@ const fs = require('fs');
 								message: `Test ${testcase.name} ${descriptor} ${problem.message}`,
 							});
 
-							const lineNum = line;//problem.message.match(/:(\d)\)/g)[0];
+							const lineNum = problem.$t.match(/:(\d)\)/g)[0];
 							const branch = github.context.ref.replace("refs/heads/", "");
-							const slackMessage = `Test ${testcase.name} ${descriptor}\n${JSON.stringify(problem)}\n` +
+							const slackMessage = `Test ${testcase.name} ${descriptor}\n${problem.message}\n` +
 									+ " <https://github.com/" + github.context.repo.owner + "/" +  github.context.repo.repo
 									+ "/blob/" + branch + "/" + path + "#L" + lineNum + "|" + path + ">";
 
