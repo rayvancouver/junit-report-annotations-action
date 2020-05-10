@@ -54,7 +54,7 @@ const fs = require('fs');
 								}
 							}
 
-							const descriptor = testcase.failure ? 'failed' : 'errored';
+							const descriptor = testcase.failure ? 'Failure' : 'Error';
 							annotations.push({
 								path: path,
 								start_line: line,
@@ -65,11 +65,14 @@ const fs = require('fs');
 								message: `Test ${testcase.name} ${descriptor} ${problem.message}`,
 							});
 
+							const owner = github.context.repo.owner;
+							const repo = github.context.repo.repo;
 							const lineNum = /:(\d+)\)/g.exec(problem.$t)[1]
 							const branch = github.context.ref.replace("refs/heads/", "");
 							const message = problem.message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-							const slackMessage = "Test " + testcase.name + " " + descriptor + "\n" + message
-									+ "\n<https://github.com/" + github.context.repo.owner + "/" + github.context.repo.repo
+
+							const slackMessage = "*Test " + descriptor + "* | " + owner + ":" + repo + " - `" + testcase.name + "`:```" + message
+									+ "```<https://github.com/" + owner + "/" + repo
 									+ "/blob/" + branch + "/" + path + "#L" + lineNum + "|" + path + ">";
 
 							await axios({
