@@ -67,7 +67,7 @@ const fs = require('fs');
 
 							const lineNum = /:(\d+)\)/g.exec(problem.$t)[1]
 							const branch = github.context.ref.replace("refs/heads/", "");
-							const message = problem.message.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
+							const message = problem.message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 							const slackMessage = "Test " + testcase.name + " " + descriptor + "\n" + message +
 									+ "\n<https://github.com/" + github.context.repo.owner + "/" + github.context.repo.repo
 									+ "/blob/" + branch + "/" + path + "#L" + lineNum + "|" + path + ">";
