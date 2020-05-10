@@ -1,3 +1,5 @@
+const Octokit = require( '@octokit/rest');
+
 const core = require('@actions/core');
 const github = require('@actions/github');
 const glob = require('@actions/glob');
@@ -34,7 +36,7 @@ const fs = require('fs');
 				numSkipped += Number(testsuite.skipped);
 				testFunction = async testcase => {
 					if (testcase.failure) {
-						if (annotations.length < numFailures) {
+						if (numFailures === "0" || annotations.length < numFailures) {
 							const klass = testcase.classname.replace(/$.*/g, '').replace(/\./g, '/');
 							const path = `${testSrcPath}${klass}.java`
 
@@ -53,7 +55,7 @@ const fs = require('fs');
 								start_line: line,
 								end_line: line,
 								start_column: 0,
-								end_column: 0,
+								end_column: 1,
 								annotation_level: 'failure',
 								message: `Junit test ${testcase.name} failed ${testcase.failure.message}`,
 							});
@@ -92,16 +94,6 @@ const fs = require('fs');
 			annotation_level,
 			message: `Junit Results ran ${numTests} in ${testDuration} seconds ${numErrored} Errored, ${numFailed} Failed, ${numSkipped} Skipped`,
 		};
-		// const annotation = {
-		//   path: 'test',
-		//   start_line: 1,
-		//   end_line: 1,
-		//   start_column: 2,
-		//   end_column: 2,
-		//   annotation_level,
-		//   message: `[500] failure`,
-		// };
-
 
 		const update_req = {
 			...github.context.repo,
