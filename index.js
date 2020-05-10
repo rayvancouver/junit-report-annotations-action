@@ -1,4 +1,3 @@
-const Octokit = require( '@octokit/rest');
 
 const core = require('@actions/core');
 const github = require('@actions/github');
@@ -14,6 +13,8 @@ const fs = require('fs');
 		const numFailures = core.getInput('numFailures');
 		const accessToken = core.getInput('access-token');
 		const testSrcPath = core.getInput('testSrcPath');
+		const slackBotToken = core.getInput('slack-bot-token');
+		const slackChannelId = core.getInput('slack-channel-id');
 		const globber = await glob.create(path, {followSymbolicLinks: false});
 
 		let numTests = 0;
@@ -50,7 +51,7 @@ const fs = require('fs');
 									break;
 								}
 							}
-							annotations.push({
+							let item = {
 								path: path,
 								start_line: line,
 								end_line: line,
@@ -58,6 +59,23 @@ const fs = require('fs');
 								end_column: 1,
 								annotation_level: 'failure',
 								message: `Junit test ${testcase.name} failed ${testcase.failure.message}`,
+							};
+							annotations.push(item);
+
+							axios.create({
+								url: "https://slack.com/api/chat.postMessage",
+								method: "post",
+								headers: {
+									"Authorization": `Bearer ${slackBotToken}`,
+									"Content-type": "application/json"
+								},
+								data: {
+									"channel": slackChannelId,
+									"text": JSON.stringify(item)
+								}
+							})
+							.catch(function (error) {
+								console.log(error);
 							});
 						}
 						//add
