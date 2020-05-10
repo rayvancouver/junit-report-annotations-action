@@ -63,7 +63,8 @@ const fs = require('fs');
 							};
 							annotations.push(item);
 
-							await axios.create({
+							console.log(`channel=${slackChannelId}`);
+							await axios({
 								url: "https://slack.com/api/chat.postMessage",
 								method: "post",
 								headers: {

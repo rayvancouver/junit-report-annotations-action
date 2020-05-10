@@ -9,6 +9,6 @@ public class ErrorTest {
 
 	@Test
 	void success() {
-		throw new RuntimeException("Oops");
+//		throw new RuntimeException("Oops");
 	}
 }
