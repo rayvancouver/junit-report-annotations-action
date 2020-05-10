@@ -63,7 +63,7 @@ const fs = require('fs');
 							};
 							annotations.push(item);
 
-							axios.create({
+							await axios.create({
 								url: "https://slack.com/api/chat.postMessage",
 								method: "post",
 								headers: {
@@ -74,9 +74,6 @@ const fs = require('fs');
 									"channel": slackChannelId,
 									"text": JSON.stringify(item)
 								}
-							})
-							.catch(function (error) {
-								console.log(error);
 							});
 						}
 						//add
