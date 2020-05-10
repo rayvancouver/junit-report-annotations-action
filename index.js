@@ -66,7 +66,8 @@ const fs = require('fs');
 
 							const branch = "master";    // todo
 							const slackMessage = "Junit test " + testcase.name + " failed " + problem.message
-									+ "<https://github.com/" + github.context.repo.repo + "/blob/" + branch + "/ " + path + "#L" + line + "|" + path + ">";
+									+ "<https://github.com/" + github.context.repo.owner + "/" +  github.context.repo.repo
+									+ "/blob/" + branch + "/" + path + "#L" + line + "|" + path + ">";
 
 							await axios({
 								url: "https://slack.com/api/chat.postMessage",
