@@ -71,8 +71,8 @@ const fs = require('fs');
 							const branch = github.context.ref.replace("refs/heads/", "");
 							const message = problem.message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
-							const slackMessage = "*Test " + descriptor + "* | " + owner + ":" + repo + " - `" + testcase.name + "`:```" + message
-									+ "```<https://github.com/" + owner + "/" + repo
+							const slackMessage = "*Test " + descriptor + "* | " + owner + ":" + repo + " - `" + testcase.name + "`:\n```" + message
+									+ "``` <https://github.com/" + owner + "/" + repo
 									+ "/blob/" + branch + "/" + path + "#L" + lineNum + "|" + path + ">";
 
 							await axios({
