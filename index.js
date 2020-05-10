@@ -53,21 +53,23 @@ const fs = require('fs');
 									break;
 								}
 							}
-							let item = {
+
+							const descriptor = testcase.failure ? 'failed' : 'errored';
+							annotations.push({
 								path: path,
 								start_line: line,
 								end_line: line,
 								start_column: 0,
 								end_column: 1,
 								annotation_level: 'failure',
-								message: `Junit test ${testcase.name} failed ${problem.message}`,
-							};
-							annotations.push(item);
+								message: `Test ${testcase.name} ${descriptor} ${problem.message}`,
+							});
 
-							const branch = "master";    // todo
-							const slackMessage = "Junit test " + testcase.name + " failed " + problem.message
-									+ "<https://github.com/" + github.context.repo.owner + "/" +  github.context.repo.repo
-									+ "/blob/" + branch + "/" + path + "#L" + line + "|" + path + ">";
+							const lineNum = problem.message.match(/:(\d)\)/g)[0];
+							const branch = github.context.ref.replace("refs/heads/", "");
+							const slackMessage = `Test ${testcase.name} ${descriptor}\n${problem.message}\n` +
+									+ " <https://github.com/" + github.context.repo.owner + "/" +  github.context.repo.repo
+									+ "/blob/" + branch + "/" + path + "#L" + lineNum + "|" + path + ">";
 
 							await axios({
 								url: "https://slack.com/api/chat.postMessage",

@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class SuccessTest {
 
 	@Test
-	void success() {
+	void testSuccess() {
 		assertEquals(50, 50);
 	}
 }

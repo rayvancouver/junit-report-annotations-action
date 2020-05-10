@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 public class ErrorTest {
 
 	@Test
-	void success() {
+	void testError() {
 		throw new RuntimeException("Oops");
 	}
 }
