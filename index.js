@@ -3,6 +3,7 @@ const core = require('@actions/core');
 const github = require('@actions/github');
 const glob = require('@actions/glob');
 const parser = require('xml2json');
+const axios = require('axios');
 const fs = require('fs');
 
 
