@@ -64,6 +64,7 @@ const fs = require('fs');
 							};
 							annotations.push(item);
 
+							const branch = "master";    // todo
 							const slackMessage = `
 								Junit test ${testcase.name} failed ${problem.message}
 								https://github.com/${github.repository}/blob/${branch}/${path}#L${line}
