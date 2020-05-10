@@ -65,7 +65,8 @@ const fs = require('fs');
 							annotations.push(item);
 
 							const branch = "master";    // todo
-							const slackMessage = `Junit test ${testcase.name} failed ${problem.message}\n<https://github.com/${github.context.repo.repo}/blob/${branch}/${path}#L${line}|${path}>`;
+							const slackMessage = "Junit test " + testcase.name + " failed " + problem.message
+									+ "<https://github.com/" + github.context.repo.repo + "/blob/" + branch + "/ " + path + "#L" + line + "|" + path + ">";
 
 							await axios({
 								url: "https://slack.com/api/chat.postMessage",
