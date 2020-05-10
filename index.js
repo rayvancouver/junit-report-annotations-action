@@ -77,7 +77,7 @@ const fs = require('fs');
 								data: {
 									"channel": slackChannelId,
 									"text": {
-										"type": "markdown",
+										"type": "mrkdwn",
 										"text": slackMessage
 									}
 								}
