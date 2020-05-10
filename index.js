@@ -37,7 +37,8 @@ const fs = require('fs');
 				numFailed += Number(testsuite.failures);
 				numSkipped += Number(testsuite.skipped);
 				testFunction = async testcase => {
-					if (testcase.failure) {
+					const problem = testcase.failure || testcase.error;
+					if (problem) {
 						if (numFailures === "0" || annotations.length < numFailures) {
 							const klass = testcase.classname.replace(/$.*/g, '').replace(/\./g, '/');
 							const path = `${testSrcPath}${klass}.java`
@@ -59,11 +60,15 @@ const fs = require('fs');
 								start_column: 0,
 								end_column: 1,
 								annotation_level: 'failure',
-								message: `Junit test ${testcase.name} failed ${testcase.failure.message}`,
+								message: `Junit test ${testcase.name} failed ${problem.message}`,
 							};
 							annotations.push(item);
 
-							console.log(`channel=${slackChannelId}`);
+							const slackMessage = `
+								Junit test ${testcase.name} failed ${problem.message}
+								https://github.com/${GITHUB_REPOSITORY}/blob/${branch}/${path}#L${line}
+							`;
+
 							await axios({
 								url: "https://slack.com/api/chat.postMessage",
 								method: "post",
@@ -73,7 +78,10 @@ const fs = require('fs');
 								},
 								data: {
 									"channel": slackChannelId,
-									"text": JSON.stringify(item)
+									"text": {
+										"type": "markdown",
+										"text": slackMessage
+									}
 								}
 							});
 						}
