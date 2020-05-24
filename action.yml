@@ -7,6 +7,12 @@ inputs:
   access-token:
     description: 'github token'
     required: true
+  slack-bot-token:
+    description: 'slack bot token'
+    required: true
+  slack-channel-id:
+    description: 'slack channel id'
+    required: true
   path:
     description: 'glob to junit xml files'
     required: true

@@ -26,6 +26,15 @@ const fs = require('fs');
 
 		let annotations = [];
 
+		const octokit = new github.GitHub(accessToken);
+		const req = {
+			...github.context.repo,
+			ref: github.context.sha
+		}
+		const res = await octokit.checks.listForRef(req);
+
+		const check_run_id = res.data.check_runs.filter(check => check.name === 'build')[0].id
+
 		for await (const file of globber.globGenerator()) {
 			const data = await fs.promises.readFile(file);
 			var json = JSON.parse(parser.toJson(data));
@@ -71,7 +80,8 @@ const fs = require('fs');
 							const branch = github.context.ref.replace("refs/heads/", "");
 							const message = problem.message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
-							const slackMessage = "*Test " + descriptor + "* | " + owner + ":" + repo + "@" + branch
+							const slackMessage = "*Test " + descriptor
+									+ "* | <https://github.com/" + owner + "/" + repo + "/runs/" + check_run_id + "|" + owner + ":" + repo + "@" + branch + ">"
 									+ " - `" + testcase.name + "`:\n```" + message
 									+ "``` <https://github.com/" + owner + "/" + repo
 									+ "/blob/" + branch + "/" + path + "#L" + lineNum + "|" + path + ">";
@@ -112,14 +122,6 @@ const fs = require('fs');
 			}
 		}
 
-		const octokit = new github.GitHub(accessToken);
-		const req = {
-			...github.context.repo,
-			ref: github.context.sha
-		}
-		const res = await octokit.checks.listForRef(req);
-
-		const check_run_id = res.data.check_runs.filter(check => check.name === 'build')[0].id
 
 		const annotation_level = numFailed + numErrored > 0 ? 'failure' : 'notice';
 		const annotation = {

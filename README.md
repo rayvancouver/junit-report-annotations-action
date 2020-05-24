@@ -1,5 +1,5 @@
 # junit-report-annotations-action
-Create an annotation of the build information and also list first n failed tests as seporate annotations
+Create an annotations for test results and send a message to slack for each failed test
 
 ## Example
 ```
@@ -7,5 +7,7 @@ Create an annotation of the build information and also list first n failed tests
       if: always()
       with:
         access-token: ${{ secrets.GITHUB_TOKEN }}
+        slack-bot-token: ${{ secrets.SLACK_BOT_TOKEN }}
+        slack-channel-id: Cxxxxxxxx
 ``` 
    
