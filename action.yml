@@ -16,7 +16,7 @@ inputs:
   path:
     description: 'glob to junit xml files'
     required: true
-    default: 'target/surefire-reports/*.xml'
+    default: 'target/surefire-reports2/*.xml'
   includeSummary:
     description: 'include summary annotation'
     required: true
