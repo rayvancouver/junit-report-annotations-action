@@ -28,7 +28,7 @@ inputs:
   testSrcPath: 
     description: 'path to test source'
     required: true
-    default: 'src/test/java/'
+    default: 'src/test/java2/'
 runs:
   using: 'node12'
   main: 'index.js'
