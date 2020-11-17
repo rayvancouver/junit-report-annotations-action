@@ -78,7 +78,9 @@ const fs = require('fs');
 							const repo = github.context.repo.repo;
 							const lineNum = /:(\d+)\)/g.exec(problem.$t)[1]
 							const branch = github.context.ref.replace("refs/heads/", "");
-							const message = problem.message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+							const message = problem.message
+									? problem.message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+									: "No message found";
 
 							const slackMessage = "*Test " + descriptor
 									+ "* | <https://github.com/" + owner + "/" + repo + "/runs/" + check_run_id + "|" + owner + ":" + repo + "@" + branch + ">"
