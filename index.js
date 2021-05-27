@@ -76,7 +76,8 @@ const fs = require('fs');
 
 							const owner = github.context.repo.owner;
 							const repo = github.context.repo.repo;
-							const lineNum = /:(\d+)\)/g.exec(problem.$t)[1]
+							const arr = /:(\d+)\)/g.exec(problem.$t);
+							const lineNum = (arr && arr.length > 1) ? arr[1] : 0;
 							const branch = github.context.ref.replace("refs/heads/", "");
 							const message = problem.message
 									? problem.message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
