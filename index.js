@@ -55,7 +55,7 @@ const fs = require('fs');
 					core.debug(`Testcase: ${JSON.stringify(testcase)}, numFailures: ${numFailures}`);
 					if (problem) {
 						if (numFailures === "0" || annotations.length < numFailures) {
-							core.debug(`attribs: ${testcase._attributes}`)
+							core.debug(`attribs: ${JSON.stringify(testcase._attributes)}`)
 							const klass = testcase._attributes.classname.replace(/$.*/g, '').replace(/\./g, '/');
 							const path = `${testSrcPath}${klass}.java`
 
