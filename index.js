@@ -40,10 +40,10 @@ const fs = require('fs');
 		for await (const file of globber.globGenerator()) {
 			const data = await fs.promises.readFile(file);
 			var json = JSON.parse(parser.xml2json(data, {compact: true}));
-			core.debug(`json: ${JSON.stringify(json)}`);
+//			core.debug(`json: ${JSON.stringify(json)}`);
 			if (json.testsuite) {
 				const testsuite = json.testsuite;
-				core.debug(`test: ${testsuite}`)
+//				core.debug(`test: ${testsuite}`)
 				testDuration += Number(testsuite.time);
 				numTests += Number(testsuite.tests);
 				numErrored += Number(testsuite.errors);
@@ -54,7 +54,7 @@ const fs = require('fs');
 					core.debug(`Problem: ${problem}, numFailures: ${numFailures}`);
 					if (problem) {
 						if (numFailures === "0" || annotations.length < numFailures) {
-							const klass = testcase.classname.replace(/$.*/g, '').replace(/\./g, '/');
+							const klass = testcase._attributes.classname.replace(/$.*/g, '').replace(/\./g, '/');
 							const path = `${testSrcPath}${klass}.java`
 
 							const file = await fs.promises.readFile(path, {encoding: 'utf-8'});
@@ -62,7 +62,7 @@ const fs = require('fs');
 							let line = 0;
 							const lines = file.split('\n')
 							for (let i = 0; i < lines.length; i++) {
-								if (lines[i].indexOf(testcase.name) >= 0) {
+								if (lines[i].indexOf(testcase._attributes.name) >= 0) {
 									line = i;
 									break;
 								}
@@ -76,21 +76,21 @@ const fs = require('fs');
 								start_column: 0,
 								end_column: 1,
 								annotation_level: 'failure',
-								message: `Test ${testcase.name} ${descriptor} ${problem.message}`,
+								message: `Test ${testcase._attributes.name} ${descriptor} ${problem._attributes.message}`,
 							});
 
 							const owner = github.context.repo.owner;
 							const repo = github.context.repo.repo;
-							const arr = /:(\d+)\)/g.exec(problem.$t);
+							const arr = /:(\d+)\)/g.exec(problem._attributes.$t);
 							const lineNum = (arr && arr.length > 1) ? arr[1] : 0;
 							const branch = github.context.ref.replace("refs/heads/", "");
-							const message = problem.message
+							const message = problem._attributes.message
 									? problem.message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
 									: "No message found";
 
 							const slackMessage = "*Test " + descriptor
 									+ "* | <https://github.com/" + owner + "/" + repo + "/runs/" + check_run_id + "|" + owner + ":" + repo + "@" + branch + ">"
-									+ " - `" + testcase.name + "`:\n```" + message
+									+ " - `" + testcase._attributes.name + "`:\n```" + message
 									+ "``` <https://github.com/" + owner + "/" + repo
 									+ "/blob/" + branch + "/" + path + "#L" + lineNum + "|" + path + ">";
 
