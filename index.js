@@ -39,7 +39,7 @@ const fs = require('fs');
 
 		for await (const file of globber.globGenerator()) {
 			const data = await fs.promises.readFile(file);
-			var json = JSON.parse(parser.xml2json(data));
+			var json = JSON.parse(parser.xml2json(data, {compact: true}));
 			core.debug(`json: ${JSON.stringify(json)}`);
 			if (json.testsuite) {
 				const testsuite = json.testsuite;
