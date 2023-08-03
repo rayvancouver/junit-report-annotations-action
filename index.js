@@ -40,9 +40,10 @@ const fs = require('fs');
 		for await (const file of globber.globGenerator()) {
 			const data = await fs.promises.readFile(file);
 			var json = JSON.parse(parser.xml2json(data));
-			core.debug(`json: ${json}`);
+			core.debug(`json: ${JSON.stringify(json)}`);
 			if (json.testsuite) {
 				const testsuite = json.testsuite;
+				core.debug(`test: ${testsuite}`)
 				testDuration += Number(testsuite.time);
 				numTests += Number(testsuite.tests);
 				numErrored += Number(testsuite.errors);
