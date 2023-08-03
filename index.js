@@ -35,6 +35,8 @@ const fs = require('fs');
 
 		const check_run_id = res.data.check_runs.filter(check => check.name === 'build')[0].id
 
+		core.debug(`Run id: ${check_run_id}`);
+
 		for await (const file of globber.globGenerator()) {
 			const data = await fs.promises.readFile(file);
 			var json = JSON.parse(parser.xml2json(data));
@@ -88,6 +90,8 @@ const fs = require('fs');
 									+ " - `" + testcase.name + "`:\n```" + message
 									+ "``` <https://github.com/" + owner + "/" + repo
 									+ "/blob/" + branch + "/" + path + "#L" + lineNum + "|" + path + ">";
+
+							core.debug(slackMessage);
 
 							await axios({
 								url: "https://slack.com/api/chat.postMessage",
