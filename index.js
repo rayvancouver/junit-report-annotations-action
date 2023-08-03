@@ -43,20 +43,17 @@ const fs = require('fs');
 //			core.debug(`json: ${JSON.stringify(json)}`);
 			if (json.testsuite) {
 				const testsuite = json.testsuite;
-//				core.debug(`test: ${testsuite}`)
 				testDuration += Number(testsuite._attributes.time);
 				numTests += Number(testsuite._attributes.tests);
 				numErrored += Number(testsuite._attributes.errors);
 				numFailed += Number(testsuite._attributes.failures);
 				numSkipped += Number(testsuite._attributes.skipped);
-				core.debug(`tests: ${numTests}`)
 				testFunction = async testcase => {
 					const problem = testcase.failure || testcase.error;
-					core.debug(`Testcase: ${JSON.stringify(testcase)}, numFailures: ${numFailures}`);
+//					core.debug(`Testcase: ${JSON.stringify(testcase)}, numFailures: ${numFailures}`);
 					if (problem) {
 						if (numFailures === "0" || annotations.length < numFailures) {
 							const name = testcase._attributes.classname;
-							core.debug(`attribs: ${name}`)
 							const klass = name.replace(/$.*/g, '').replace(/\./g, '/');
 							const path = `${testSrcPath}${klass}.java`
 
@@ -88,7 +85,7 @@ const fs = require('fs');
 							const lineNum = (arr && arr.length > 1) ? arr[1] : 0;
 							const branch = github.context.ref.replace("refs/heads/", "");
 							const message = problem._attributes.message
-									? problem.message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+									? problem._attributes.message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
 									: "No message found";
 
 							const slackMessage = "*Test " + descriptor
