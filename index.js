@@ -44,14 +44,15 @@ const fs = require('fs');
 			if (json.testsuite) {
 				const testsuite = json.testsuite;
 //				core.debug(`test: ${testsuite}`)
-				testDuration += Number(testsuite.time);
-				numTests += Number(testsuite.tests);
-				numErrored += Number(testsuite.errors);
-				numFailed += Number(testsuite.failures);
-				numSkipped += Number(testsuite.skipped);
+				testDuration += Number(testsuite._attributes.time);
+				numTests += Number(testsuite._attributes.tests);
+				numErrored += Number(testsuite._attributes.errors);
+				numFailed += Number(testsuite._attributes.failures);
+				numSkipped += Number(testsuite._attributes.skipped);
+				core.debug(`tests: ${numTests}`)
 				testFunction = async testcase => {
 					const problem = testcase.failure || testcase.error;
-					core.debug(`Problem: ${problem}, numFailures: ${numFailures}`);
+					core.debug(`Problem: ${JSON.stringify(problem)}, numFailures: ${numFailures}`);
 					if (problem) {
 						if (numFailures === "0" || annotations.length < numFailures) {
 							const klass = testcase._attributes.classname.replace(/$.*/g, '').replace(/\./g, '/');
