@@ -52,9 +52,10 @@ const fs = require('fs');
 				core.debug(`tests: ${numTests}`)
 				testFunction = async testcase => {
 					const problem = testcase.failure || testcase.error;
-					core.debug(`Problem: ${JSON.stringify(problem)}, numFailures: ${numFailures}`);
+					core.debug(`Testcase: ${JSON.stringify(testcase)}, numFailures: ${numFailures}`);
 					if (problem) {
 						if (numFailures === "0" || annotations.length < numFailures) {
+							core.debug(`attribs: ${testcase._attributes}`)
 							const klass = testcase._attributes.classname.replace(/$.*/g, '').replace(/\./g, '/');
 							const path = `${testSrcPath}${klass}.java`
 
