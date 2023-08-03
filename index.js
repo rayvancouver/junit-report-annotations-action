@@ -49,6 +49,7 @@ const fs = require('fs');
 				numSkipped += Number(testsuite.skipped);
 				testFunction = async testcase => {
 					const problem = testcase.failure || testcase.error;
+					core.debug(`Problem: ${problem}, numFailures: ${numFailures}`);
 					if (problem) {
 						if (numFailures === "0" || annotations.length < numFailures) {
 							const klass = testcase.classname.replace(/$.*/g, '').replace(/\./g, '/');
