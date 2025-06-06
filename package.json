@@ -18,9 +18,9 @@
   },
   "homepage": "https://github.com/ashley-taylor/junit-report-annotations-action#readme",
   "dependencies": {
-    "@actions/core": "^1.2.6",
+    "@actions/core": "^1.11.1",
     "@actions/github": "^2.2.0",
-    "@actions/glob": "^0.1.0",
+    "@actions/glob": "^0.1.2",
     "axios": "^0.19.2",
     "xml-js": "^1.6.11"
   }
