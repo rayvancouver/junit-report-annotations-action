@@ -44,13 +44,13 @@ const fs = require('fs');
 			const data = await fs.promises.readFile(file);
 			var json = JSON.parse(parser.xml2json(data, {compact: true}));
 			core.debug(`json: ${JSON.stringify(json)}`);
-			if (json.testsuite) {
-				const testsuite = json.testsuite;
-				testDuration += Number(testsuite._attributes.time);
-				numTests += Number(testsuite._attributes.tests);
-				numErrored += Number(testsuite._attributes.errors);
-				numFailed += Number(testsuite._attributes.failures);
-				numSkipped += Number(testsuite._attributes.skipped);
+			if (json.testsuites) {
+				const testsuites = json.testsuites;
+				testDuration += Number(testsuites._attributes.time);
+				numTests += Number(testsuites._attributes.tests ?? 0);
+				numErrored += Number(testsuites._attributes.errors ?? 0);
+				numFailed += Number(testsuites._attributes.failures ?? 0);
+				numSkipped += Number(testsuites._attributes.skipped ?? 0);
 				testFunction = async testcase => {
 					const problem = testcase.failure || testcase.error;
 //					core.debug(`Testcase: ${JSON.stringify(testcase)}, numFailures: ${numFailures}`);
@@ -123,28 +123,30 @@ const fs = require('fs');
 					}
 				}
 
-				if (Array.isArray(testsuite.testcase)) {
-					for (const testcase of testsuite.testcase) {
-						await testFunction(testcase)
+				if (Array.isArray(testsuites.testsuite)) {
+					for (const testcase of testsuites.testsuite) {
+						if (testcase.testcase) {
+							await testFunction(testcase.testcase);
+						}
 					}
 				} else {
 					//single test
-					await testFunction(testsuite.testcase)
+					await testFunction(testsuites.testcase)
 				}
 			}
 		}
 
 
-		const annotation_level = numFailed + numErrored > 0 ? 'failure' : 'notice';
-		const annotation = {
-			path: 'test',
-			start_line: 0,
-			end_line: 0,
-			start_column: 0,
-			end_column: 0,
-			annotation_level,
-			message: `Junit Results ran ${numTests} in ${testDuration} seconds ${numErrored} Errored, ${numFailed} Failed, ${numSkipped} Skipped`,
-		};
+		// const annotation_level = numFailed + numErrored > 0 ? 'failure' : 'notice';
+		// const annotation = {
+		// 	path: 'test',
+		// 	start_line: 0,
+		// 	end_line: 0,
+		// 	start_column: 0,
+		// 	end_column: 0,
+		// 	annotation_level,
+		// 	message: `Junit Results ran ${numTests} in ${testDuration} seconds ${numErrored} Errored, ${numFailed} Failed, ${numSkipped} Skipped`,
+		// };
 
 		// const update_req = {
 		// 	...github.context.repo,
