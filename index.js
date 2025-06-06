@@ -27,12 +27,14 @@ const fs = require('fs');
 
 		let annotations = [];
 
+		core.debug(`Getting git for repo=${github.context.repo} sha=${github.context.sha}:`);
 		const octokit = new github.GitHub(accessToken);
 		const req = {
 			...github.context.repo,
 			ref: github.context.sha
 		}
 		const res = await octokit.checks.listForRef(req);
+		core.debug(`Response: ${JSON.stringify(res.data)}`);
 
 		const check_run_id = res.data.check_runs.filter(check => check.name === 'build')[0].id
 
@@ -41,7 +43,7 @@ const fs = require('fs');
 		for await (const file of globber.globGenerator()) {
 			const data = await fs.promises.readFile(file);
 			var json = JSON.parse(parser.xml2json(data, {compact: true}));
-//			core.debug(`json: ${JSON.stringify(json)}`);
+			core.debug(`json: ${JSON.stringify(json)}`);
 			if (json.testsuite) {
 				const testsuite = json.testsuite;
 				testDuration += Number(testsuite._attributes.time);
