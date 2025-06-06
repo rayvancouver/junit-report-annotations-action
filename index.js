@@ -98,7 +98,7 @@ const fs = require('fs');
 
 							core.debug(slackMessage);
 
-							await axios({
+							const result = await axios({
 								url: "https://slack.com/api/chat.postMessage",
 								method: "post",
 								headers: {
@@ -118,6 +118,7 @@ const fs = require('fs');
 									]
 								}
 							});
+							core.debug(`Slack response: ${JSON.stringify(result.data)}`);
 						}
 						//add
 					}
