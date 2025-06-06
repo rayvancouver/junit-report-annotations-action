@@ -55,18 +55,18 @@ const fs = require('fs');
 						if (numFailures === "0" || annotations.length < numFailures) {
 							const name = testcase._attributes.classname;
 							const klass = name.replace(/$.*/g, '').replace(/\./g, '/');
-							const path = `${testSrcPath}${klass}.java`
+							const path = `${testSrcPath}${klass}`
 
-							const file = await fs.promises.readFile(path, {encoding: 'utf-8'});
-							//TODO: make this better won't deal with methods with arguments etc
-							let line = 0;
-							const lines = file.split('\n')
-							for (let i = 0; i < lines.length; i++) {
-								if (lines[i].indexOf(testcase._attributes.name) >= 0) {
-									line = i;
-									break;
-								}
-							}
+							// const file = await fs.promises.readFile(path, {encoding: 'utf-8'});
+							// //TODO: make this better won't deal with methods with arguments etc
+							// let line = 0;
+							// const lines = file.split('\n')
+							// for (let i = 0; i < lines.length; i++) {
+							// 	if (lines[i].indexOf(testcase._attributes.name) >= 0) {
+							// 		line = i;
+							// 		break;
+							// 	}
+							// }
 
 							const descriptor = testcase.failure ? 'Failure' : 'Error';
 							annotations.push({
