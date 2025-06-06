@@ -27,18 +27,18 @@ const fs = require('fs');
 
 		let annotations = [];
 
-		core.debug(`Getting git for repo=${github.context.repo} sha=${github.context.sha}:`);
-		const octokit = new github.GitHub(accessToken);
-		const req = {
-			...github.context.repo,
-			ref: github.context.sha
-		}
-		const res = await octokit.checks.listForRef(req);
-		core.debug(`Response: ${JSON.stringify(res.data)}`);
+		core.debug(`Getting git for repo=${JSON.stringify(github.context.repo)} sha=${github.context.sha}:`);
+		// const octokit = new github.GitHub(accessToken);
+		// const req = {
+		// 	...github.context.repo,
+		// 	ref: github.context.sha
+		// }
+//		const res = await octokit.checks.listForRef(req);
+//		core.debug(`Response: ${JSON.stringify(res.data)}`);
 
-		const check_run_id = res.data.check_runs.filter(check => check.name === 'build')[0].id
+//		const check_run_id = res.data.check_runs.filter(check => check.name === 'build')[0].id
 
-		core.debug(`Run id: ${check_run_id}`);
+//		core.debug(`Run id: ${check_run_id}`);
 
 		for await (const file of globber.globGenerator()) {
 			const data = await fs.promises.readFile(file);
@@ -92,7 +92,7 @@ const fs = require('fs');
 									: "No message found";
 
 							const slackMessage = "*Test " + descriptor
-									+ "* | <https://github.com/" + owner + "/" + repo + "/runs/" + check_run_id + "|" + owner + ":" + repo + "@" + branch + ">"
+									+ "* | <https://github.com/" + owner + "/" + repo + "/actions>"
 									+ " - `" + testcase._attributes.name + "`:\n```" + message
 									+ "```";
 
@@ -146,16 +146,16 @@ const fs = require('fs');
 			message: `Junit Results ran ${numTests} in ${testDuration} seconds ${numErrored} Errored, ${numFailed} Failed, ${numSkipped} Skipped`,
 		};
 
-		const update_req = {
-			...github.context.repo,
-			check_run_id,
-			output: {
-				title: "Junit Results",
-				summary: `Num passed etc`,
-				annotations: [annotation, ...annotations]
-			}
-		}
-		await octokit.checks.update(update_req);
+		// const update_req = {
+		// 	...github.context.repo,
+		// 	check_run_id,
+		// 	output: {
+		// 		title: "Junit Results",
+		// 		summary: `Num passed etc`,
+		// 		annotations: [annotation, ...annotations]
+		// 	}
+		// }
+		// await octokit.checks.update(update_req);
 	} catch (error) {
 		core.setFailed(error.message);
 	}
