@@ -9,6 +9,7 @@ const fs = require('fs');
 
 (async () => {
 	try {
+		core.debug(`Running slack test alerts:`);
 		const path = core.getInput('path');
 		const includeSummary = core.getInput('includeSummary');
 		const numFailures = core.getInput('numFailures');
