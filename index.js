@@ -54,12 +54,12 @@ const fs = require('fs');
 					if (problem) {
 						if (numFailures === "0" || annotations.length < numFailures) {
 							const name = testcase._attributes.classname;
-							const klass = name.replace(/$.*/g, '').replace(/\./g, '/');
-							const path = `${testSrcPath}${klass}`
+							// const klass = name.replace(/$.*/g, '').replace(/\./g, '/');
+							// const path = `${testSrcPath}${klass}`
 
 							// const file = await fs.promises.readFile(path, {encoding: 'utf-8'});
 							// //TODO: make this better won't deal with methods with arguments etc
-							// let line = 0;
+							let line = 0;
 							// const lines = file.split('\n')
 							// for (let i = 0; i < lines.length; i++) {
 							// 	if (lines[i].indexOf(testcase._attributes.name) >= 0) {
@@ -70,7 +70,7 @@ const fs = require('fs');
 
 							const descriptor = testcase.failure ? 'Failure' : 'Error';
 							annotations.push({
-								path: path,
+								path: name,
 								start_line: line,
 								end_line: line,
 								start_column: 0,
@@ -91,8 +91,7 @@ const fs = require('fs');
 							const slackMessage = "*Test " + descriptor
 									+ "* | <https://github.com/" + owner + "/" + repo + "/runs/" + check_run_id + "|" + owner + ":" + repo + "@" + branch + ">"
 									+ " - `" + testcase._attributes.name + "`:\n```" + message
-									+ "``` <https://github.com/" + owner + "/" + repo
-									+ "/blob/" + branch + "/" + path + "#L" + lineNum + "|" + path + ">";
+									+ "```";
 
 							core.debug(slackMessage);
 
